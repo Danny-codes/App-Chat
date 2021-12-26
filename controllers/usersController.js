@@ -1,22 +1,22 @@
 
-const getAllUsers = () => {
-    console.log('All users')
+const getAllUsers = async (req,res) => {
+    res.send('All users')
 }
 
-const getAUser = () => {
-    console.log('A user')
+const getAUser = async (req,res) => {
+    res.send('A user')
 }
 
-const createUser = () => {
-    console.log('user created')
+const createUser = async (req,res) => {
+    res.send('user created')
 }
 
-const updateUser = () => {
-    console.log('User updated')
+const updateUser = async (req,res) => {
+    res.send('User updated')
 }
 
-const deleteUser = () => {
-    console.log('User deleted')
+const deleteUser = async (req,res) => {
+    res.send('User deleted')
 }
 
 module.exports = {
