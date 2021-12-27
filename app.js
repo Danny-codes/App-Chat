@@ -11,7 +11,7 @@ app.use('/api/user', users)
 const port = process.env.PORT
 const start = async () => {
         await DB()
-        app.listen(port, ()=> {
+        app.listen(3000, ()=> {
         console.log('Running')
         })
 }
