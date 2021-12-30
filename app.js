@@ -1,7 +1,15 @@
 const express = require('express')
-const app = express()
+const http = require('http')
+const socketio= require("socket.io")
 require("dotenv").config()
 
+const app = express()
+const server = http.createServer(app)
+const io = socketio(server)
+
+io.on('connection', (socket) => {
+    console.log('New connection')
+})
 //body parser
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
@@ -16,12 +24,17 @@ const auth = require('./routes/authRoute')
 app.use('/api/user', users)
 app.use('/api/user', auth)
 
+//view engine
+app.set('view engine', "ejs")
+
 
 const port = process.env.PORT
 const start = async () => {
         await DB()
-        app.listen(port, ()=> {
+        server.listen(port, ()=> {
         console.log('Running')
         })
 }
 start()
+
+module.exports = io;
