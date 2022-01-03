@@ -20,11 +20,14 @@ app.use(express.json());
 const {DB} = require('./database/db.js')
 const users = require('./routes/usersRoute')
 const auth = require('./routes/authRoute')
+const adress = require('./routes/adressRoute')
+
 
 
 //routes
 app.use('/api/user', users)
 app.use('/api/user', auth)
+app.use('/', adress)
 
 //view engine
 app.set('view engine', "ejs")
