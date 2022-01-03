@@ -1,22 +1,26 @@
 const User = require('../models/userModel')
 const bcryptjs = require('bcryptjs')
+const jwt = require('../models/jwt');
+require("dotenv").config()
 
-const getAllUsers = async (req,res) => {
+const UserServices = {};
+
+UserServices.getAllUsers = async (req,res) => {
     try{
         const users = await User.findAll()
-        res.send(users)
+        res.json(users)
     }catch(error){
         res.send(error)
     }
 }
 
-const getAUser = async (req,res) => {
+UserServices.getAUser = async (req,res) => {
     try{
         const id = req.params.id
         const user = await User.findOne({where: {id:id}})
 
         if(!user){
-            res.send('User not found')
+            res.json('User not found')
         }else{
             res.send(user)
         }
@@ -26,11 +30,11 @@ const getAUser = async (req,res) => {
     }
 }
 
-const createUser = async (req,res) => {
+UserServices.createUser = async (req,res) => {
     try{
         const {
             name, email, password, bio
-        } = req.body 
+        } = req.body
     
         const salt = bcryptjs.genSaltSync(10)
         const hash = bcryptjs.hashSync(password, salt)
@@ -41,14 +45,16 @@ const createUser = async (req,res) => {
             password: hash,
             bio: bio
         })
+
+        const token = jwt.sign({user: newUser.name, id: newUser.id})
     
-        res.send(newUser)
+        res.json({user: newUser, token: token})
     }catch(error){
         res.send(error)
     }
 }
 
-const updateUser = async (req,res) => {
+UserServices.updateUser = async (req,res) => {
     const {name, email, password, bio} = req.body
     try{
         const id = req.params.id
@@ -74,7 +80,7 @@ const updateUser = async (req,res) => {
             }
             user.save()
            .then(() => {
-               res.send(user)
+               res.json(user)
            });
 
         }
@@ -83,7 +89,7 @@ const updateUser = async (req,res) => {
     }
 }
 
-const deleteUser = async (req,res) => {
+UserServices.deleteUser = async (req,res) => {
     try{
         const id = req.params.id
         const email = req.body.email
@@ -96,7 +102,7 @@ const deleteUser = async (req,res) => {
            if(user.email == foundByEmail.email){
             user.deleted = true
             user.save().then(() => {
-                res.send(user)
+                res.json(user)
             })
            }else{
                res.send('Email does not correspond to user')
@@ -107,6 +113,4 @@ const deleteUser = async (req,res) => {
     }
 }
 
-module.exports = {
-    getAllUsers, getAUser, createUser, updateUser, deleteUser
-}
+module.exports = UserServices
