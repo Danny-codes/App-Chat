@@ -10,7 +10,7 @@ UserServices.getAllUsers = async (req,res) => {
         const users = await User.findAll()
         res.json(users)
     }catch(error){
-        res.send(error)
+        res.json(error)
     }
 }
 
@@ -22,11 +22,11 @@ UserServices.getAUser = async (req,res) => {
         if(!user){
             res.json('User not found')
         }else{
-            res.send(user)
+            res.json(user)
         }
      
     }catch(error){
-        res.send(error)
+        res.json(error)
     }
 }
 
@@ -48,9 +48,9 @@ UserServices.createUser = async (req,res) => {
 
         const token = jwt.sign({user: newUser.name, id: newUser.id})
     
-        res.json({user: newUser, token: token})
+        res.redirect('/chat')
     }catch(error){
-        res.send(error)
+        res.json(error)
     }
 }
 
@@ -60,7 +60,7 @@ UserServices.updateUser = async (req,res) => {
         const id = req.params.id
         const user = await User.findOne({where:{id:id}})
         if(!user){
-            res.send('Not found user')
+            res.json('Not found user')
         }else{
 
             if(name){
@@ -105,7 +105,7 @@ UserServices.deleteUser = async (req,res) => {
                 res.json(user)
             })
            }else{
-               res.send('Email does not correspond to user')
+               res.json('Email does not correspond to user')
            }
         }
     }catch(error){
