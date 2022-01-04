@@ -10,7 +10,7 @@ const authenticate = async(req,res) => {
            const correct = bcrypt.compareSync(password, foundUser.password)
            if(correct){
                const token = jwt.sign({user: foundUser.name, id: foundUser.id})
-               res.redirect('/chat')
+               res.redirect('/home')
            }else{
                res.redirect('/login')
            }

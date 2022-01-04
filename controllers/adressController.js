@@ -11,4 +11,8 @@ const register = async (req,res) => {
     res.render('register')
 }
 
-module.exports =  {login, chat, register}
+const home = async (req,res) => {
+    res.render('home')
+}
+
+module.exports =  {login, chat, register, home}

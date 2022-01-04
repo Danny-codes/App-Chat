@@ -48,7 +48,7 @@ UserServices.createUser = async (req,res) => {
 
         const token = jwt.sign({user: newUser.name, id: newUser.id})
     
-        res.redirect('/chat')
+        res.redirect('/home')
     }catch(error){
         res.json(error)
     }
