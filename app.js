@@ -29,6 +29,10 @@ app.use('/api/user', users)
 app.use('/api/user', auth)
 app.use('/', adress)
 
+//static
+
+app.use(express.static('./public'));
+
 //view engine
 app.set('view engine', "ejs")
 
