@@ -1,17 +1,15 @@
 const express = require('express')
 const cors = require('cors');
-const http = require('http')
-const socketio= require("socket.io")
 require("dotenv").config()
-
 const app = express()
-app.use(cors())
-const server = http.createServer(app)
-const io = socketio(server)
 
-io.on('connection', (socket) => {
-    console.log('New connection')
-})
+var http = require('http').createServer(app),
+    sockets = require('./sockets')
+
+app.use(cors())
+
+require('./sockets')
+
 //body parser
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
@@ -40,10 +38,12 @@ app.set('view engine', "ejs")
 const port = process.env.PORT
 const start = async () => {
         await DB()
-        server.listen(port, ()=> {
+        http.listen(port, ()=> {
         console.log('Running')
         })
 }
+sockets.startingIoServer(http)
 start()
 
-module.exports = io;
+module.exports = http
+
