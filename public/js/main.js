@@ -11,9 +11,6 @@ socket.on('message', message => {
     //scroll down
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-    //clear input
-    e.target.elements.msg.value = '';
-    e.target.elements.msg.focus();
 });
 
 //Message submit
@@ -25,6 +22,10 @@ chatForm.addEventListener('submit', (e) => {
 
     //Emit message to server
     socket.emit('chatMessage', msg);
+
+      //clear input
+      e.target.elements.msg.value = '';
+      e.target.elements.msg.focus();
 })
 
 //Output message to DOM
@@ -32,9 +33,9 @@ outputMessage = (message) => {
     const div = document.createElement('div')
     div.classList.add('message');
     div.innerHTML = `
-    <p class="message-info">Mary <span>9:15pm</span></p>
+    <p class="message-info">${message.username} <span>${message.time}</span></p>
     <p>
-        ${message}
+        ${message.text}
     </p>
     `
     document.querySelector('.chat-message').appendChild(div)
