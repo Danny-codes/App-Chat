@@ -9,16 +9,18 @@ const authenticate = async(req,res) => {
         if(foundUser){
            const correct = bcrypt.compareSync(password, foundUser.password)
            if(correct){
-               const token = jwt.sign({user: foundUser.name, id: foundUser.id})
-               res.redirect('/home')
+               const token = jwt.sign({name: foundUser.name, bio: foundUser.bio, email: foundUser.email})
+              return res.render('home',{
+                  userName: foundUser.name, token : token
+              })
            }else{
-               res.redirect('/login')
+               return res.json({msg: 'Email or password incorrect'})
            }
         }else{
-            res.redirect('/login')
+            return res.json({msg: 'Email or password incorrect'})
         }
     }catch(error){
-        res.json(error)
+       return res.json(error)
     }
 }
 

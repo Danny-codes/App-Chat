@@ -8,9 +8,9 @@ const UserServices = {};
 UserServices.getAllUsers = async (req,res) => {
     try{
         const users = await User.findAll()
-        res.json(users)
+       return res.json({users: users, user: req.data})
     }catch(error){
-        res.json(error)
+       return res.json(error)
     }
 }
 
@@ -20,13 +20,13 @@ UserServices.getAUser = async (req,res) => {
         const user = await User.findOne({where: {id:id}})
 
         if(!user){
-            res.json('User not found')
+          return  res.json('User not found')
         }else{
             res.json(user)
         }
      
     }catch(error){
-        res.json(error)
+      return  res.json(error)
     }
 }
 
@@ -46,11 +46,11 @@ UserServices.createUser = async (req,res) => {
             bio: bio
         })
 
-        const token = jwt.sign({user: newUser.name, id: newUser.id})
+        const token = jwt.sign({name: newUser.name, bio: newUser.bio, email: newUser.email})
     
-        res.redirect('/home')
+       return res.json({user:{name: newUser.name, bio: newUser.bio}, token});
     }catch(error){
-        res.json(error)
+       return res.json(error)
     }
 }
 
@@ -60,7 +60,7 @@ UserServices.updateUser = async (req,res) => {
         const id = req.params.id
         const user = await User.findOne({where:{id:id}})
         if(!user){
-            res.json('Not found user')
+          return  res.json('Not found user')
         }else{
 
             if(name){
@@ -80,7 +80,7 @@ UserServices.updateUser = async (req,res) => {
             }
             user.save()
            .then(() => {
-               res.json(user)
+             return  res.json(user)
            });
 
         }
@@ -97,15 +97,15 @@ UserServices.deleteUser = async (req,res) => {
         const foundByEmail = await User.findOne({where:{email:email}})
 
         if(!user){
-            res.send('User not found')
+          return  res.send('User not found')
         }else{
            if(user.email == foundByEmail.email){
             user.deleted = true
             user.save().then(() => {
-                res.json(user)
+            return    res.json(user)
             })
            }else{
-               res.json('Email does not correspond to user')
+           return    res.json('Email does not correspond to user')
            }
         }
     }catch(error){
